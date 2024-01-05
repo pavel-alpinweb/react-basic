@@ -12,30 +12,34 @@ function App() {
     ]);
 
     const inputRef = useRef();
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
+    const [post, setPost] = useState({
+        title: '',
+        body: '',
+    });
 
     const addNewPost = (e) => {
         e.preventDefault();
+        setPosts([...posts, { ...post, id: Date.now() }]);
+        setPost({title: '', body: ''});
     };
 
     return (
         <div className="App">
             <form>
                 <MyInput
-                    value={title}
-                    onChange={e => setTitle(e.target.value)}
+                    value={post.title}
+                    onChange={e => setPost({...post, title: e.target.value})}
                     type="text"
                     placeholder="Название поста"
                 />
                 <MyInput
                     ref={inputRef}
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
+                    value={post.body}
+                    onChange={e => setPost({...post, body: e.target.value})}
                     type="text"
                     placeholder="Описание поста"
                 />
-                <MyButton onClick={addNewPost} disabled>Создать пост</MyButton>
+                <MyButton onClick={addNewPost}>Создать пост</MyButton>
             </form>
             <PostList posts={posts} title={'Список постов'}/>
         </div>
