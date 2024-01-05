@@ -11,7 +11,8 @@ function App() {
 
     return (
         <div className="App">
-            {posts.map((post) => <Post post={post}/>)}
+            <h1 style={{textAlign: 'center'}}>Список постов</h1>
+            {posts.map((post) => <Post post={post} key={post.id}/>)}
         </div>
     );
 }
