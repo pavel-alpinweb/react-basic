@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import './styles/App.css'
 import PostList from "./components/PostList";
 import MyButton from "./components/UI/button/MyButton";
@@ -11,6 +11,7 @@ function App() {
         {id: 3, title: 'Blueprint', body: 'Blueprint - язык программирования'},
     ]);
 
+    const inputRef = useRef();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
 
@@ -28,6 +29,7 @@ function App() {
                     placeholder="Название поста"
                 />
                 <MyInput
+                    ref={inputRef}
                     value={description}
                     onChange={e => setDescription(e.target.value)}
                     type="text"
