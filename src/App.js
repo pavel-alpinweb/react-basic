@@ -1,8 +1,7 @@
 import React, {useRef, useState} from "react";
 import './styles/App.css'
 import PostList from "./components/PostList";
-import MyButton from "./components/UI/button/MyButton";
-import MyInput from "./components/UI/input/MyInput";
+import PostForm from "./components/UI/form/PostForm";
 
 function App() {
     const [posts, setPosts] = useState([
@@ -11,37 +10,22 @@ function App() {
         {id: 3, title: 'Blueprint', body: 'Blueprint - язык программирования'},
     ]);
 
-    const inputRef = useRef();
-    const [post, setPost] = useState({
-        title: '',
-        body: '',
-    });
+    const createPost = (newPost) => {
+        setPosts([...posts, newPost]);
+    };
 
-    const addNewPost = (e) => {
-        e.preventDefault();
-        setPosts([...posts, { ...post, id: Date.now() }]);
-        setPost({title: '', body: ''});
+    const deletePost = (postId) => {
+        setPosts(posts.filter((post) => post.id !== postId));
     };
 
     return (
         <div className="App">
-            <form>
-                <MyInput
-                    value={post.title}
-                    onChange={e => setPost({...post, title: e.target.value})}
-                    type="text"
-                    placeholder="Название поста"
-                />
-                <MyInput
-                    ref={inputRef}
-                    value={post.body}
-                    onChange={e => setPost({...post, body: e.target.value})}
-                    type="text"
-                    placeholder="Описание поста"
-                />
-                <MyButton onClick={addNewPost}>Создать пост</MyButton>
-            </form>
-            <PostList posts={posts} title={'Список постов'}/>
+            <PostForm create={createPost}/>
+            {
+                posts.length !== 0
+                ? <PostList remove={deletePost} posts={posts} title={'Список постов'}/>
+                : <h1 style={{textAlign: 'center'}}>Посты не найдены</h1>
+            }
         </div>
     );
 }
