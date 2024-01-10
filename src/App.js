@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import './styles/App.css'
 import PostList from "./components/PostList";
 import PostForm from "./components/UI/form/PostForm";
@@ -29,9 +29,12 @@ function App() {
         setPosts(posts.filter((post) => post.id !== postId));
     };
 
+    useEffect(() => {
+        fetchPosts();
+    }, []);
+
     return (
         <div className="App">
-            <MyButton onClick={fetchPosts}>Fetch Posts</MyButton>
             <MyButton style={{marginTop: 30}} onClick={() => setModal(true)}>
                 Создать пост
             </MyButton>
