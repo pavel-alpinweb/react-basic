@@ -9,7 +9,7 @@ const Post = (props) => {
                     #{props.number} {props.post.title}
                 </strong>
                 <div>
-                    {props.post.body}
+                    {props.post.content}
                 </div>
             </div>
             <div className="post__btns">

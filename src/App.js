@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from "react";
+import React, {useState} from "react";
 import './styles/App.css'
 import PostList from "./components/PostList";
 import PostForm from "./components/UI/form/PostForm";
@@ -6,33 +6,32 @@ import PostFilter from "./components/PostFilter";
 import MyModal from "./components/UI/modal/MyModal";
 import MyButton from "./components/UI/button/MyButton";
 import {useSortedAndSearchPosts, useSortedPosts} from "./hooks/usePosts";
+import axios from "axios";
 
 function App() {
-    const [posts, setPosts] = useState([
-        {id: 1, title: 'JavaScript', body: 'язык программирования'},
-        {id: 2, title: 'Java', body: 'язык программирования'},
-        {id: 3, title: 'Blueprint', body: 'язык программирования'},
-        {id: 4, title: 'Wordpress', body: 'а это cms'},
-        {id: 5, title: 'Node.js', body: 'платформа'},
-    ]);
+    const [posts, setPosts] = useState([]);
     const [filter, setFilter] = useState({sort: '', query: ''});
     const [modal, setModal] = useState(false);
 
     const sortedPosts = useSortedPosts(posts, filter.sort);
-
     const sortedAndSearchPosts = useSortedAndSearchPosts(sortedPosts, filter.query);
+
+    async function fetchPosts() {
+        const response = await axios.get('https://jsonplaceholder.org/posts');
+        setPosts(response.data);
+    }
 
     const createPost = (newPost) => {
         setPosts([...posts, newPost]);
         setModal(false);
     };
-
     const deletePost = (postId) => {
         setPosts(posts.filter((post) => post.id !== postId));
     };
 
     return (
         <div className="App">
+            <MyButton onClick={fetchPosts}>Fetch Posts</MyButton>
             <MyButton style={{marginTop: 30}} onClick={() => setModal(true)}>
                 Создать пост
             </MyButton>
