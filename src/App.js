@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import './styles/App.css'
 import PostList from "./components/PostList";
 import PostForm from "./components/UI/form/PostForm";
@@ -6,17 +6,24 @@ import PostFilter from "./components/PostFilter";
 import MyModal from "./components/UI/modal/MyModal";
 import MyButton from "./components/UI/button/MyButton";
 import MyLoader from "./components/UI/loader/MyLoader";
+import MyPagination from "./components/UI/pagination/MyPagination";
 import {useSortedAndSearchPosts, useSortedPosts} from "./hooks/usePosts";
 import PostService from "./API/PostService";
 import {useFetching} from "./hooks/useFetching";
+import {getPageCount} from "./utils/pages";
 
 function App() {
     const [posts, setPosts] = useState([]);
     const [filter, setFilter] = useState({sort: '', query: ''});
     const [modal, setModal] = useState(false);
+    const [totalPages, setTotalPages] = useState(0);
+    const [limit, setLimit] = useState(10);
+    const [page, setPage] = useState(1);
     const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-        const posts = await PostService.getAll();
-        setPosts(posts);
+        const response = await PostService.getAll(limit, page);
+        setPosts(response.data);
+        const totalCount = response.headers['x-total-count']
+        setTotalPages(getPageCount(totalCount, limit));
     });
 
     const sortedPosts = useSortedPosts(posts, filter.sort);
@@ -32,7 +39,7 @@ function App() {
 
     useEffect(() => {
         fetchPosts();
-    }, []);
+    }, [page]);
 
     return (
         <div className="App">
@@ -48,6 +55,13 @@ function App() {
             {isPostsLoading
                 ? <div style={{display: 'flex', justifyContent: 'center', marginTop: 50}}><MyLoader /></div> :
                 <PostList remove={deletePost} posts={sortedAndSearchPosts} title={'Список постов'}/>
+            }
+            { totalPages === 0 ? '' :
+                <MyPagination
+                    totalPages={totalPages}
+                    page={page}
+                    setPage={setPage}
+                />
             }
         </div>
     );
