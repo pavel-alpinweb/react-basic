@@ -5,6 +5,10 @@ import {AuthContext} from "../../../context";
 
 const Navbar = () => {
     const {isAuth, setIsAuth} = useContext(AuthContext);
+    const logout = () => {
+        setIsAuth(false);
+        localStorage.removeItem('auth');
+    }
 
     return (
         <div className="navbar">
@@ -15,7 +19,7 @@ const Navbar = () => {
                     isAuth
                         ?
                             <MyButton
-                                onClick={() => setIsAuth(false)}
+                                onClick={logout}
                             >Выйти</MyButton>
                         :
                             ''
