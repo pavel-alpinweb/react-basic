@@ -12,6 +12,7 @@ import PostService from "../API/PostService";
 import {useFetching} from "../hooks/useFetching";
 import {getPageCount} from "../utils/pages";
 import {useObserver} from "../hooks/useObserver";
+import MySelect from "../components/UI/select/MySelect";
 
 function Posts() {
     const [posts, setPosts] = useState([]);
@@ -56,6 +57,16 @@ function Posts() {
                 <PostForm create={createPost}/>
             </MyModal>
             <PostFilter filter={filter} setFilter={setFilter}/>
+            <MySelect
+                value={limit}
+                onChangeHandler={value => setLimit(value)}
+                defaultValue="Количетсво элементов на странице"
+                options={[
+                    {value: 5, name: '5'},
+                    {value: 10, name: '10'},
+                    {value: 20, name: '20'},
+                ]}
+            ></MySelect>
             <hr style={{margin: '15px 0'}}/>
             {postError && <h1>Произошла ошибка ${postError}</h1>}
             <PostList remove={deletePost} posts={sortedAndSearchPosts} title={'Список постов'}/>
