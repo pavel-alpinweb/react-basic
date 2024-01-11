@@ -17,7 +17,6 @@ const MyPagination = ({totalPages, page, setPage}) => {
                 <MyButton
                     key={p}
                     active={page === p}
-                    onClick={() => setPage(p)}
                 >
                     {p}
                 </MyButton>
