@@ -6,7 +6,7 @@ const PostForm = ({create}) => {
     const inputRef = useRef();
     const [post, setPost] = useState({
         title: '',
-        content: '',
+        body: '',
     });
 
     const addNewPost = (e) => {
@@ -15,7 +15,7 @@ const PostForm = ({create}) => {
             ...post, id: Date.now(),
         };
         create(newPost);
-        setPost({title: '', content: ''});
+        setPost({title: '', body: ''});
     };
 
     return (
@@ -29,7 +29,7 @@ const PostForm = ({create}) => {
             <MyInput
                 ref={inputRef}
                 value={post.content}
-                onChange={e => setPost({...post, content: e.target.value})}
+                onChange={e => setPost({...post, body: e.target.value})}
                 type="text"
                 placeholder="Описание поста"
             />
